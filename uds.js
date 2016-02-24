@@ -333,5 +333,10 @@
         return executeUdsAjaxCallWithData(url, jsonAssociates,'PUT');
     };
 
+    uds.getSbtForCase = function(uql){
+        var url = udsHostName.clone().setPath('/case/list-status-only').addQueryParam('where', encodeURIComponent(uql));;
+        return executeUdsAjaxCall(url,'GET');
+    };
+
     return uds;
 }));
