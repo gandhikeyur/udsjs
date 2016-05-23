@@ -22,21 +22,21 @@
     }
     else
     {
-      if (window.location.hostname === 'access.qa.redhat.com' || window.location.hostname === 'qa.foo.redhat.com' || window.location.hostname === 'fooqa.redhat.com') {
-          udsHostName = new Uri('https://unified-ds-qa.gsslab.pnq2.redhat.com/');
-      }
-      else
-      {
-         if (window.location.hostname === 'access.devgssci.devlab.phx1.redhat.com' || window.location.hostname === 'ci.foo.redhat.com' || window.location.hostname === 'fooci.redhat.com') {
+        if (window.location.hostname === 'access.qa.redhat.com' || window.location.hostname === 'qa.foo.redhat.com' || window.location.hostname === 'fooqa.redhat.com') {
+            udsHostName = new Uri('https://unified-ds-qa.gsslab.pnq2.redhat.com/');
+        }
+        else
+        {
+            if (window.location.hostname === 'access.devgssci.devlab.phx1.redhat.com' || window.location.hostname === 'ci.foo.redhat.com' || window.location.hostname === 'fooci.redhat.com') {
                 udsHostName = new Uri('https://unified-ds-ci.gsslab.brq.redhat.com/');
-         }
-         else
-               {
-                  if (window.location.hostname === 'access.stage.redhat.com' || window.location.hostname === 'stage.foo.redhat.com' || window.location.hostname === 'foostage.redhat.com') {
-                         udsHostName = new Uri('https://unified-ds-stage.gsslab.pnq2.redhat.com/');
-                  }
-               }
-      }
+            }
+            else
+            {
+                if (window.location.hostname === 'access.stage.redhat.com' || window.location.hostname === 'stage.foo.redhat.com' || window.location.hostname === 'foostage.redhat.com') {
+                    udsHostName = new Uri('https://unified-ds-stage.gsslab.pnq2.redhat.com/');
+                }
+            }
+        }
     }
 
     if(localStorage && localStorage.getItem('udsHostname')) {
@@ -99,8 +99,8 @@
     };
 
     uds.fetchCaseAssociateDetails = function (uql) {
-            var url =udsHostName.clone().setPath('/case/associates').addQueryParam('where', encodeURIComponent(uql));
-            return executeUdsAjaxCall(url,'GET');
+        var url =udsHostName.clone().setPath('/case/associates').addQueryParam('where', encodeURIComponent(uql));
+        return executeUdsAjaxCall(url,'GET');
     };
 
     //hold the lock on the case
@@ -135,14 +135,14 @@
         return executeUdsAjaxCall(url,'GET');
     };
     uds.fetchUser = function (userUql, resourceProjection) {
-        var url =udsHostName.clone().setPath('/user').addQueryParam('where', userUql);
+        var url =udsHostName.clone().setPath('/user').addQueryParam('where', encodeURIComponent(userUql));
         if(resourceProjection != null) {
             url.addQueryParam('resourceProjection', resourceProjection);
         }
         return executeUdsAjaxCall(url,'GET');
     };
     uds.fetchCases = function (uql, resourceProjection, limit, sortOption, statusOnly) {
-        var path = '/case'
+        var path = '/case';
         if(statusOnly){
             path = '/case/list-status-only'
         }
@@ -243,7 +243,7 @@
     };
 
     uds.removeUserSbr = function (userId, query) {
-        var url = udsHostName.clone().setPath('/user/' + userId + '/sbr').addQueryParam('where', query);
+        var url = udsHostName.clone().setPath('/user/' + userId + '/sbr').addQueryParam('where', encodeURIComponent(query));
         return executeUdsAjaxCall(url, 'DELETE');
     };
 
@@ -268,7 +268,7 @@
         if (uql == null || uql == undefined || uql === '') {
             throw 'User Query is mandatory';
         }
-        var url = udsHostName.clone().setPath('/user/' + userId + '/sbr').addQueryParam('where', uql);
+        var url = udsHostName.clone().setPath('/user/' + userId + '/sbr').addQueryParam('where', encodeURIComponent(uql));
         return executeUdsAjaxCallWithData(url, data, 'POST');
     };
 
@@ -277,7 +277,7 @@
             throw 'User Query is mandatory';
         }
         var url = udsHostName.clone().setPath('/user/' + userId + '/role').addQueryParam('where', uql);
-            return executeUdsAjaxCallWithData(url, data, 'POST');
+        return executeUdsAjaxCallWithData(url, data, 'POST');
     };
 
     uds.getOpenCasesForAccount = function (uql) {
@@ -302,7 +302,7 @@
         var url = udsHostName.clone().setPath('/user/' + userId + "/role-level/"+roleName);
         return executeUdsAjaxCallWithData( url, roleLevel,'PUT');
     };
-    
+
     uds.postEditPrivateComments = function (caseNumber,caseComment,caseCommentId,draft) {
         var url = udsHostName.clone().setPath('/case/' + caseNumber + "/comments/"+ caseCommentId+"/private");
         url.addQueryParam('draft', draft);
@@ -366,25 +366,25 @@
     };
 
     uds.fetchSolr = function function_name(query) {
-      if(query.q === undefined || query.q === null || query.q === '') throw 'SOLR Query is mandatory';
+        if(query.q === undefined || query.q === null || query.q === '') throw 'SOLR Query is mandatory';
 
-      var url = udsHostName.clone().setPath('/solr');
-      url.addQueryParam('wt', 'json');
-      url.addQueryParam('q', query.q);
-      if(query.fq !== undefined && query.fq !== '') {
-        url.addQueryParam('fq', query.fq);
-      }
-      if(query.start !== undefined) {
-        url.addQueryParam('start', query.start);
-      }
-      if(query.rows !== undefined) {
-        url.addQueryParam('rows', query.rows);
-      }
-      if(query.sort !== undefined && query.sort !== '') {
-        url.addQueryParam('sort', query.sort);
-      }
+        var url = udsHostName.clone().setPath('/solr');
+        url.addQueryParam('wt', 'json');
+        url.addQueryParam('q', query.q);
+        if(query.fq !== undefined && query.fq !== '') {
+            url.addQueryParam('fq', query.fq);
+        }
+        if(query.start !== undefined) {
+            url.addQueryParam('start', query.start);
+        }
+        if(query.rows !== undefined) {
+            url.addQueryParam('rows', query.rows);
+        }
+        if(query.sort !== undefined && query.sort !== '') {
+            url.addQueryParam('sort', query.sort);
+        }
 
-      return executeUdsAjaxCall(url, 'GET');
+        return executeUdsAjaxCall(url, 'GET');
     };
 
     uds.addCaseSbrs = function(caseNumber,sbrArray){
